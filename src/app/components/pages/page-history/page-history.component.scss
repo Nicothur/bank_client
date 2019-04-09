@@ -1,0 +1,26 @@
+p {
+    font-size: x-large;
+}
+
+#tableBox {
+    display: flex;
+
+    button {
+        align-self: center;
+
+        &:first-of-type {
+            padding-top: 3px;
+            padding-right: 6px;
+        }
+
+        &:last-of-type {
+            padding-top: 3px;
+            padding-left: 9px;
+        }
+    }
+
+    table {
+        display: inline-block;
+        margin: 0px 20px;
+    }
+}
