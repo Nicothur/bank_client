@@ -23,7 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true
@@ -132,10 +132,5 @@
       }
     }
   },
-  "defaultProject": "SupBank",
-  "schematics": {
-    "@schematics/angular:component": {
-      "styleext": "scss"
-    }
-  }
+  "defaultProject": "SupBank"
 }
