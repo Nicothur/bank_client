@@ -1,11 +1,10 @@
 import { User } from '../beans/User';
 import { Transaction } from '../beans/Transaction';
-import { HttpClient } from 'selenium-webdriver/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UserService {
-    constructor(private http: HttpClient) {
+    constructor() {
         
     }
 
