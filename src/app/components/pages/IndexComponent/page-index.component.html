@@ -1,0 +1,27 @@
+
+<button mat-raised-button color="warn" *ngIf="isConnected" id="logoutButton" (click)="logout()">Logout</button>
+<mat-slide-toggle mat-raised-button color="accent" *ngIf="isConnected" id="mineToggle" [(ngModel)]="userService.isMining ">Mine Enabled</mat-slide-toggle>
+<h2>{{ subTitle }}</h2>
+
+<div id="centeredBoxLayout">
+
+    <div id="unconnectedLayout" *ngIf='!isConnected'>
+        <button mat-raised-button color="primary"  (click)="goToConnect()" color="primary">Connect</button>
+        <p>OR</p>
+        <button mat-raised-button color="primary"  (click)="goToRegister()" color="primary">Create an account</button>
+    </div>
+    
+    <div id="connectedLayout" *ngIf='isConnected'>
+        <p>{{ tokens }} tokens</p>
+        <div id="buttonPanel">
+            <div id="panel1">
+                <button mat-raised-button color="primary" (click)="navigate('send')">Send</button>
+                <button mat-raised-button color="primary" (click)="navigate('history')">History</button>
+            </div>
+            <div id="panel2">
+                <button mat-raised-button color="primary" (click)="navigate('profil')">Profile</button>
+                <button mat-raised-button color="primary"  class="actionButton" (click)="mineBlock()">Mine</button>
+            </div>
+        </div>
+    </div>
+</div>

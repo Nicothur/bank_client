@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { Transaction } from 'src/app/beans/Transaction';
-import { User } from 'src/app/beans/User';
+import { Transaction } from 'src/app/Models/Transaction';
+import { User } from 'src/app/Models/User';
 import { UserService } from 'src/app/services/UserService';
+import { PeerService } from 'src/app/services/PeerService';
 
 @Component({
   selector: 'app-page-send',
@@ -11,7 +12,7 @@ import { UserService } from 'src/app/services/UserService';
   styleUrls: ['./page-send.component.scss']
 })
 export class PageSendComponent implements OnInit {
-  public subTitle: string = "";
+  public subTitle: string = "Send";
 
   public tokens: string;
 
@@ -19,15 +20,16 @@ export class PageSendComponent implements OnInit {
 
   public error: string;
 
-  public trxModel: Transaction = new Transaction();
+  public trxModel: Transaction;
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private router: Router, private userService: UserService, private peerService: PeerService) {
 
   }
 
   ngOnInit() {
-    this.subTitle = this.route.snapshot.data['title'];
-
+    if(!this.userService.token){
+      this.userService.getValideToken();
+    }
     this.tokens = (JSON.parse(sessionStorage.getItem("user")) as User).tokens.toString();
 
     this.trxModel.address = "";
@@ -54,7 +56,7 @@ export class PageSendComponent implements OnInit {
     } else {
       this.trxModel.date = new Date();
       
-      new UserService().send(JSON.parse(sessionStorage.getItem("user")), this.trxModel);
+      // this.userService.send(JSON.parse(sessionStorage.getItem("user")), this.trxModel);
 
       this.router.navigate(["history"]);
     }

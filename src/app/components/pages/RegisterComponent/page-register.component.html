@@ -1,0 +1,23 @@
+<h2>{{ subTitle }}</h2>
+
+<div id="centeredBoxLayout">
+  <form (ngSubmit)="register(form)" #form="ngForm">
+      <p>Firstname</p>
+      <input type="text" name="firstname" [(ngModel)]="firstname" required>
+
+      <p>Lastname</p>
+      <input type="text" name="lastname" [(ngModel)]="lastname" required>
+
+      <p>Password</p>
+      <input type="password" name="password" [(ngModel)]="password" required>
+
+      <p>Email</p>
+      <input type="email" name="email"[(ngModel)]="email" required>
+      <br>
+      <br>
+      <button mat-raised-button color="primary" class="actionButton" type="submit">Register</button>
+      <br>
+      <br>
+      <button mat-raised-button color="primary" (click)="goToConnect()" class="actionButton">Go to Connect</button>
+    </form>
+</div>

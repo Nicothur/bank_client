@@ -1,0 +1,39 @@
+#logoutButton{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#mineToggle{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+#unconnectedLayout {
+    p {
+        margin: 15px 0px;
+    }
+}
+
+#connectedLayout {
+    display:flex;
+    flex-direction: column;
+
+    #buttonPanel{
+        margin-top: 20px;
+
+        #panel1{
+            margin-bottom: 10px;
+            button{
+                margin: 5px;
+            }
+        }
+        #panel2{
+            margin-bottom: 10px;
+            button{
+                margin: 5px;
+            }
+        }
+    }
+}

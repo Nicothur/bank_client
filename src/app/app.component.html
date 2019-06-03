@@ -2,14 +2,13 @@
     <header>
         <h1><a href=""><img src="favicon.ico" /> SupBank</a></h1>
         
-        <button *ngIf="isConnected" class="actionButton" (click)="logout()">Logout</button>
 
         <p></p>
     </header>
 
-    <div id="content">
+    <mat-card id="content">
         <router-outlet></router-outlet>
-    </div>
+    </mat-card>
 
     <footer>
         <p>©Copyrights 2019 | All rights reserved</p>

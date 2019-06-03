@@ -1,7 +1,7 @@
 #page {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 105vh;
 
     header {
         padding: 25px;
@@ -48,15 +48,14 @@
     }
 
     #content {
-        padding: 30px;
-        margin-bottom: 30px;
-
+        margin: 0 10% 50px 10%;
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         text-align: center;
     }
 
     footer {
-        padding: 30px;
     
         border-top: black;
         border-top-width: 1px;

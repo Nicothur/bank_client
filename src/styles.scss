@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 a {
     &:visited {
         color: black;
@@ -17,14 +18,6 @@ button {
     &:focus {
         outline: none;
     }
-}
-
-h2 {
-    position: absolute;
-    margin: 0;
-    background: white;
-    top: 76px;
-    padding-right: 5px;
 }
 
 p {

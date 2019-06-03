@@ -1,0 +1,16 @@
+<h2>{{ subTitle }}</h2>
+
+<div id="centeredBoxLayout">
+  <form (ngSubmit)="connect(form)" #form="ngForm">
+      <p>Account ID</p>
+      <input type="text" name="accountid" [(ngModel)]="accountid" required>
+
+      <p>Password</p>
+      <input type="password" name="password" [(ngModel)]="password" required>
+      <br>
+      <br>
+      <button mat-raised-button color="primary" class="actionButton" type="submit">Connect</button>
+    </form>
+    <br>
+    <button mat-raised-button color="primary"  (click)="goToRegister()" class="actionButton">Go to Register</button>
+</div>

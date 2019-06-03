@@ -1,27 +1,65 @@
-import { User } from '../beans/User';
-import { Transaction } from '../beans/Transaction';
-import { HttpClient } from 'selenium-webdriver/http';
+import { User } from '../Models/User';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Token } from '../Models/Token';
+import * as shajs from 'sha.js'
 
 @Injectable()
 export class UserService {
-    constructor(private http: HttpClient) {
-        
-    }
+  public token: Token;
+  public currentUser: User;
+  public isMining: boolean;
 
-    public create(user: User) {
-        
-    }
+  constructor(private http: HttpClient) {}
 
-    public get(user: User) : User {
-        return null;
+  public login(id, password): Observable<any> {
+    if (!this.token) {
+      this.getValideToken();
     }
+    let body = {
+      AccountId: '' + id,
+      Password: shajs('sha256').update(password).digest('hex')
+    };
+    let headers = {
+      Authorization: 'Bearer ' + this.token.token
+    };
+    return this.http.post('https://supbank-api.azurewebsites.net/Login', body, {
+      headers: headers
+    });
+  }
 
-    public update(user: User, newUser: User) : User {
-        return null;
-    }
+  public getValideToken(): void {
+    let body = {
+      SecretId: '25w6GVcUp6',
+      SecretPass: 'ez3rymWV8k6662UxV83WB7V4Y36hYR6iUjhc3B7T5F6RU'
+    };
+    this.http
+      .post('https://supbank-api.azurewebsites.net/Auth', body)
+      .subscribe((result: Token) => {
+        this.token = result;
+      });
+  }
 
-    public send(user: User, trx: Transaction) {
-        return null;
-    }
+  public create(
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string
+  ): Observable<User> {
+    let body = {
+      Firstname: firstname,
+      Lastname: lastname,
+      Email: email,
+      Password: shajs('sha256').update(password).digest('hex')
+    };
+    let headers = {
+      Authorization: 'Bearer ' + this.token.token
+    };
+    return this.http.post<User>(
+      'https://supbank-api.azurewebsites.net/Register',
+      body,
+      { headers: headers }
+    );
+  }
 }

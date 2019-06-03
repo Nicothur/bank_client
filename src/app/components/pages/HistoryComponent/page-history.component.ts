@@ -1,16 +1,8 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Transaction } from 'src/app/beans/Transaction';
-import { User } from 'src/app/beans/User';
-
-@Pipe({name: 'trxState'})
-export class TrxStatePipe implements PipeTransform {
-  transform(transactions: Transaction[], state: boolean): Transaction[] {
-    return transactions.filter(object => {
-      return object.sended == state;
-    });
-  }
-}
+import { Transaction } from 'src/app/Models/Transaction';
+import { User } from 'src/app/Models/User';
+import { UserService } from 'src/app/services/UserService';
 
 @Component({
   selector: 'app-page-history',
@@ -18,19 +10,20 @@ export class TrxStatePipe implements PipeTransform {
   styleUrls: ['./page-history.component.scss']
 })
 export class PageHistoryComponent implements OnInit {
-  public subTitle: string = "";
+  public subTitle: string = "History";
 
   public isSendedTable: boolean;
 
   public transactions: Transaction[];
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private userService: UserService) {
 
   }
 
   ngOnInit() {
-    this.subTitle = this.route.snapshot.data['title'];
-
+    if(!this.userService.token){
+      this.userService.getValideToken();
+    }
     this.isSendedTable = true;
 
     this.transactions = (JSON.parse(sessionStorage.getItem("user")) as User).transactions;

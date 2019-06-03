@@ -16,10 +16,6 @@
       </thead>
 
       <tbody>
-          <tr *ngFor="let trx of transactions | trxState: isSendedTable">
-            <td>{{ trx.date | date:"dd/MM/yyyy" }}</td>
-            <td>{{ trx.amount }}</td>
-          </tr>
       </tbody>
     </table>
 
