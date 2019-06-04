@@ -1,25 +1,18 @@
 <h2>{{ subTitle }}</h2>
+<mat-slide-toggle mat-raised-button color="accent" *ngIf="isConnected" id="mineToggle" [(ngModel)]="userService.isMining ">Mine Enabled</mat-slide-toggle>
 
 <div id="centeredBoxLayout">
-  <p id="centeredBoxHeader">{{ address }}</p>
+      <p>Firstname</p>
+      <input matInput type="text" name="firstname" [(ngModel)]="userService.currentUser.firstname" disabled>
 
-  <form (ngSubmit)="edit(form)" #form="ngForm">
-      <p>Username</p>
-      <input type="text" name="username" #trackUsername="ngModel" [(ngModel)]="userModel.username" disabled required>
-      <app-label-input-error *ngIf="errorInput == 'username'" text="{{ error }}"></app-label-input-error>
-    
-      <p>Password</p>
-      <input type="password" name="password" #trackPassword="ngModel" [(ngModel)]="userModel.password" required>
-      <app-label-input-error *ngIf="errorInput == 'password'" text="{{ error }}"></app-label-input-error>
+      <p>Lastname</p>
+      <input matInput type="text" name="lastname" [(ngModel)]="userService.currentUser.lastname" disabled required>
 
-      <p>New password</p>
-      <input type="password" name="passwordNew" #trackPasswordNew="ngModel" [(ngModel)]="userModel.passwordNew" required>
-      <app-label-input-error *ngIf="errorInput == 'passwordNew'" text="{{ error }}"></app-label-input-error>
+      <p>Email</p>
+      <input matInput type="email" name="email" [(ngModel)]="userService.currentUser.email" disabled required>
     
-      <p>Confirm new password</p>
-      <input type="password" name="passwordConfirm" #trackPasswordConfirm="ngModel" [(ngModel)]="userModel.passwordConfirm" required>
-      <app-label-input-error *ngIf="errorInput == 'passwordConfirm'" text="{{ error }}"></app-label-input-error>
-    
-      <button class="actionButton" type="submit">Edit account</button>
-  </form>
+      <p>Account ID</p>
+      <input matInput type="text" name="accountid" [(ngModel)]="userService.currentUser.accountId" disabled required>
+    <br>
+    <button mat-raised-button color="primary" class="actionButton" (click)="goBack();">Back</button>
 </div>

@@ -12,15 +12,18 @@
     </div>
     
     <div id="connectedLayout" *ngIf='isConnected'>
-        <p>{{ tokens }} tokens</p>
+        <p>You have {{ userService.currentUser.tokens }} tokens</p>
         <div id="buttonPanel">
             <div id="panel1">
                 <button mat-raised-button color="primary" (click)="navigate('send')">Send</button>
                 <button mat-raised-button color="primary" (click)="navigate('history')">History</button>
             </div>
             <div id="panel2">
-                <button mat-raised-button color="primary" (click)="navigate('profil')">Profile</button>
+                <button mat-raised-button color="primary" (click)="navigate('profile')">Profile</button>
                 <button mat-raised-button color="primary"  class="actionButton" (click)="mineBlock()">Mine</button>
+                <button mat-raised-button color="primary"  class="actionButton" (click)="mineBlockAnReceiveNotTheSameBlock()">mineBlockAnReceiveNotTheSameBlock</button>
+                <button mat-raised-button color="primary"  class="actionButton" (click)="mineBlockAnReceiveTheSameBlock()">mineBlockAnReceiveTheSameBlock</button>
+
             </div>
         </div>
     </div>

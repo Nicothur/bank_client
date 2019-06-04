@@ -1,9 +1,10 @@
+import { Transaction } from './Transaction';
+
 export interface Block{
     index: number;
-    timestamp: number;
-    data: Object;
-    signature: String;
-    proofOfWork: String;
-    hash: String;
-    previousHash: String;
+    data: Transaction;
+    signature: string;
+    proofOfWork: string;
+    hash: string;
+    previousHash: string;
 }

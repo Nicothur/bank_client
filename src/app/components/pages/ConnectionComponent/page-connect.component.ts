@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { User } from 'src/app/Models/User';
-import { UserService } from 'src/app/services/UserService';
+import { UserService } from 'src/app/Services/UserService';
 
 @Component({
   selector: 'app-page-connect',
@@ -26,6 +26,8 @@ export class PageConnectComponent implements OnInit{
     if(!this.userService.token){
       this.userService.getValideToken();
     }
+
+    sessionStorage.removeItem("user");
   }
 
   public goToRegister(){
@@ -51,6 +53,7 @@ export class PageConnectComponent implements OnInit{
         }
         sessionStorage.setItem("user", JSON.stringify(result));
         this.userService.currentUser = result
+        this.userService.currentUser.tokens = 0
         // this.peerServices.connect(this.username, this.password)
         this.router.navigate([""]);
       })

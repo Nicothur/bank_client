@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/Models/User';
-import { BlockChainService } from 'src/app/services/BlockChainService';
-import { UserService } from 'src/app/services/UserService';
+import { BlockChainService } from 'src/app/Services/BlockChainService';
+import { UserService } from 'src/app/Services/UserService';
 @Component({
   selector: 'app-page-index',
   templateUrl: './page-index.component.html',
@@ -10,9 +10,6 @@ import { UserService } from 'src/app/services/UserService';
 })
 export class PageIndexComponent implements OnInit {
   public subTitle: string = "Index";
-  
-  public tokens: number = 0;
-  public isMining: boolean;
   
   public isConnected: boolean;
 
@@ -25,13 +22,13 @@ export class PageIndexComponent implements OnInit {
       this.userService.getValideToken();
     }
 
-    this.isConnected = JSON.parse(sessionStorage.getItem("user")) != null;
+    this.userService.currentUser = JSON.parse(sessionStorage.getItem("user"));
+    
+    this.isConnected = this.userService.currentUser != null;
 
     if (this.isConnected) {
       this.userService.isMining = false;
       this.blockChainService.initFirstBlock();
-      console.log(this.blockChainService.blockChain)
-      // this.tokens = user.tokens;
     }
   }
 
@@ -49,7 +46,39 @@ export class PageIndexComponent implements OnInit {
     this.router.navigate(["register"])
   }
 
-  public mineBlock(){
-    console.log("i'm minig")
+
+/*
+ * Just for testing
+ */
+
+
+  public async mineBlock(){
+    if(this.userService.isMining){
+      await this.blockChainService.mineABlock();
+    }else{
+      console.log("please enable mining on top left of screen")
+    }
+  }
+
+  public async mineBlockAnReceiveNotTheSameBlock(){
+    if(this.userService.isMining){
+      this.blockChainService.mineABlock();
+      await this.blockChainService.getInterruptedNotBySameBlock();
+    }else{
+      console.log("please enable mining on top left of screen")
+    }
+  }
+
+  public async mineBlockAnReceiveTheSameBlock(){
+    if(this.userService.isMining){
+      this.blockChainService.mineABlock();
+      await this.blockChainService.getInterruptedBySameBlock();
+    }else{
+      console.log("please enable mining on top left of screen")
+    }
+  }
+
+  public navigate(path: string){
+    this.router.navigate([path])
   }
 }

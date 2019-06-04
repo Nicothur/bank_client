@@ -1,6 +1,6 @@
 export interface Transaction {
     amount: number;
-    address: string;
+    sender: string;
+    receiver: string;
     date: Date;
-    sended: boolean;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Transaction } from 'src/app/Models/Transaction';
 import { User } from 'src/app/Models/User';
-import { UserService } from 'src/app/services/UserService';
+import { UserService } from 'src/app/Services/UserService';
 
 @Component({
   selector: 'app-page-history',

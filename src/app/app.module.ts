@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
-import { MatCardModule, MatDialogModule, MatButtonModule, MatSlideToggleModule } from "@angular/material"
+import { MatCardModule, MatDialogModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule } from "@angular/material"
 import { Routes, RouterModule, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserSocket } from "./Models/Socket"
@@ -9,10 +9,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LabelInputErrorComponent } from './components/labels/label-input-error/label-input-error.component';
-import { BlockChainService } from './services/BlockChainService';
-import { UserService } from './services/UserService';
+import { BlockChainService } from './Services/BlockChainService';
+import { UserService } from './Services/UserService';
 import { HttpClientModule } from '@angular/common/http';
-import { PeerService } from './services/PeerService';
+import { PeerService } from './Services/PeerService';
 
 import { PageIndexComponent } from './components/pages/IndexComponent/page-index.component';
 import { PageConnectComponent } from './components/pages/ConnectionComponent/page-connect.component';
@@ -38,6 +38,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatCardModule,
     MatButtonModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

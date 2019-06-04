@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Token } from '../Models/Token';
-import * as shajs from 'sha.js'
+import * as shajs from 'sha.js';
+import { BlockChainService } from './BlockChainService';
+import { Transaction } from '../Models/Transaction';
 
 @Injectable()
 export class UserService {
@@ -14,12 +16,11 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   public login(id, password): Observable<any> {
-    if (!this.token) {
-      this.getValideToken();
-    }
     let body = {
       AccountId: '' + id,
-      Password: shajs('sha256').update(password).digest('hex')
+      Password: shajs('sha256')
+        .update(password)
+        .digest('hex')
     };
     let headers = {
       Authorization: 'Bearer ' + this.token.token
@@ -51,7 +52,9 @@ export class UserService {
       Firstname: firstname,
       Lastname: lastname,
       Email: email,
-      Password: shajs('sha256').update(password).digest('hex')
+      Password: shajs('sha256')
+        .update(password)
+        .digest('hex')
     };
     let headers = {
       Authorization: 'Bearer ' + this.token.token

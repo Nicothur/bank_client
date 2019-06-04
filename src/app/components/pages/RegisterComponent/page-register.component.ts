@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { User } from 'src/app/Models/User';
-import { UserService } from 'src/app/services/UserService';
+import { UserService } from 'src/app/Services/UserService';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -22,14 +22,14 @@ export class PageRegisterComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService,
-    private http: HttpClient
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     if (!this.userService.token) {
       this.userService.getValideToken();
     }
+    sessionStorage.removeItem("user")
   }
 
   public register(form: NgForm) {

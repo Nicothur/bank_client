@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Transaction } from 'src/app/Models/Transaction';
 import { User } from 'src/app/Models/User';
-import { UserService } from 'src/app/services/UserService';
-import { PeerService } from 'src/app/services/PeerService';
+import { UserService } from 'src/app/Services/UserService';
+import { PeerService } from 'src/app/Services/PeerService';
 
 @Component({
   selector: 'app-page-send',
@@ -32,7 +32,7 @@ export class PageSendComponent implements OnInit {
     }
     this.tokens = (JSON.parse(sessionStorage.getItem("user")) as User).tokens.toString();
 
-    this.trxModel.address = "";
+    // this.trxModel.address = "";
   }
 
   public send(form: NgForm) {
@@ -49,11 +49,13 @@ export class PageSendComponent implements OnInit {
       this.error = "Should be > 0";
       this.errorInput = "amount";
 
-    } else if (this.trxModel.address == "") {
-      this.error = errorRequired;
-      this.errorInput = "address";
+    } 
+    // else if (this.trxModel.address == "") {
+    //   this.error = errorRequired;
+    //   this.errorInput = "address";
 
-    } else {
+    // } 
+    else {
       this.trxModel.date = new Date();
       
       // this.userService.send(JSON.parse(sessionStorage.getItem("user")), this.trxModel);
