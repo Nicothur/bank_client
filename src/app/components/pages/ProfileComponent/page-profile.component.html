@@ -14,5 +14,7 @@
       <p>Account ID</p>
       <input matInput type="text" name="accountid" [(ngModel)]="userService.currentUser.accountId" disabled required>
     <br>
-    <button mat-raised-button color="primary" class="actionButton" (click)="goBack();">Back</button>
+    <button mat-raised-button color="primary" class="actionButton" (click)="goBack();">
+      <mat-icon>home</mat-icon>
+    </button>
 </div>

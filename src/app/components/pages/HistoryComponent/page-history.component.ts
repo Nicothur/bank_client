@@ -1,8 +1,22 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Pipe, PipeTransform, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'src/app/Models/Transaction';
 import { User } from 'src/app/Models/User';
 import { UserService } from 'src/app/Services/UserService';
+import { BlockChainService } from 'src/app/Services/BlockChainService';
+import { MatTableDataSource } from '@angular/material';
+
+export interface Received {
+  amount: number;
+  from: string;
+  date: string;
+}
+
+export interface transact {
+  amount: number;
+  id: string;
+  date: string;
+}
 
 @Component({
   selector: 'app-page-history',
@@ -12,25 +26,58 @@ import { UserService } from 'src/app/Services/UserService';
 export class PageHistoryComponent implements OnInit {
   public subTitle: string = "History";
 
-  public isSendedTable: boolean;
+  public isSendedTable: boolean= true;
 
-  public transactions: Transaction[];
+  public sended: transact[] = []; 
+  public received: transact[] = [];
 
-  constructor(private userService: UserService) {
+  public displayedColumns: string[] = ['amount', 'id', 'date'];
+  public dataSource: MatTableDataSource<transact>;
 
+  constructor(private router: Router, private userService: UserService, private blockChainService: BlockChainService) {
   }
 
   ngOnInit() {
     if(!this.userService.token){
       this.userService.getValideToken();
     }
-    this.isSendedTable = true;
 
-    this.transactions = (JSON.parse(sessionStorage.getItem("user")) as User).transactions;
+    this.userService.currentUser = JSON.parse(sessionStorage.getItem("user"));
+    if(!this.userService.currentUser){
+      this.router.navigate([""])
+      return;
+    }
 
+    this.blockChainService.getMyTokenAndTransaction()
+    
+    this.userService.currentUser.transactions.forEach(transaction => {
+      if(transaction.receiver == this.userService.currentUser.accountId){
+        this.received.push({
+          amount: transaction.amount,
+          date: transaction.date.toUTCString(),
+          id: transaction.sender,
+        })
+      }else{
+        this.sended.push({
+          amount: transaction.amount,
+          date: transaction.date.toUTCString(),
+          id: transaction.sender,
+        })
+      }
+    });
+    this.dataSource = new MatTableDataSource(this.sended)
   }
 
   public switchTable() {
     this.isSendedTable = !this.isSendedTable;
+    if(this.isSendedTable){
+      this.dataSource.data = this.sended
+    }else{
+      this.dataSource.data = this.received
+    }
+  }
+
+  public goBack(){
+    this.router.navigate([""])
   }
 }

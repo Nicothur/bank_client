@@ -27,9 +27,10 @@ export class PageIndexComponent implements OnInit {
     this.isConnected = this.userService.currentUser != null;
 
     if (this.isConnected) {
-      this.userService.isMining = false;
       this.blockChainService.initFirstBlock();
+      this.blockChainService.getMyTokenAndTransaction()
     }
+    
   }
 
   public logout() {

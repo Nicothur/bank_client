@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
-import { MatCardModule, MatDialogModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule } from "@angular/material"
+import { MatCardModule, MatDialogModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatTableModule, MatIconModule } from "@angular/material"
 import { Routes, RouterModule, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserSocket } from "./Models/Socket"
@@ -39,6 +39,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonModule,
     MatSlideToggleModule,
     MatFormFieldModule,
+    MatTableModule,
+    MatIconModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

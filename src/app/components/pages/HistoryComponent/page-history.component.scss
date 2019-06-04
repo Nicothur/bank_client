@@ -1,26 +1,45 @@
-p {
-    font-size: x-large;
+#centeredBoxLayout{
+    max-width: 1500px;
+    min-width: 200px;
+    padding: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    box-shadow: 0px 0px 10px grey;
+
+    #panel{
+        display: flex;
+        flex-direction: row;
+        align-self: center;
+        width: 100%;
+
+        .navButton{
+            margin:auto;
+        }
+    }
 }
 
-#tableBox {
-    display: flex;
+#myContainer{
+    margin:auto;
 
-    button {
-        align-self: center;
-
-        &:first-of-type {
-            padding-top: 3px;
-            padding-right: 6px;
-        }
-
-        &:last-of-type {
-            padding-top: 3px;
-            padding-left: 9px;
+    p {
+        font-size: x-large;
+    }
+    
+    .actionButton{
+        margin: auto;
+        margin-top: 20px;
+    }
+    
+    #tableBox{
+        display: flex;
+        flex-direction: row;
+        
+        mat-table{
+            width: 100%;
         }
     }
-
-    table {
-        display: inline-block;
-        margin: 0px 20px;
-    }
+    
 }

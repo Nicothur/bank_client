@@ -37,7 +37,6 @@ form {
     }
 
     input {
-        margin-left: 10px;
         height: 19px;
     }
 
@@ -86,10 +85,12 @@ table {
 }
 
 #centeredBoxLayout {
+    max-width: 500px;
     min-width: 200px;
     padding: 20px;
-
-    display: inline-block;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
     text-align: center;
 
     box-shadow: 0px 0px 10px grey;

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { Transaction } from 'src/app/Models/Transaction';
-import { User } from 'src/app/Models/User';
 import { UserService } from 'src/app/Services/UserService';
-import { PeerService } from 'src/app/Services/PeerService';
+import { BlockChainService } from 'src/app/Services/BlockChainService';
+import { Block } from 'src/app/Models/Block';
 
 @Component({
   selector: 'app-page-send',
@@ -14,15 +13,12 @@ import { PeerService } from 'src/app/Services/PeerService';
 export class PageSendComponent implements OnInit {
   public subTitle: string = "Send";
 
-  public tokens: string;
+  public amount: number;
 
-  public errorInput: string;
+  public accountId: string;
 
-  public error: string;
 
-  public trxModel: Transaction;
-
-  constructor(private router: Router, private userService: UserService, private peerService: PeerService) {
+  constructor(private router: Router, private userService: UserService, private blockChainService: BlockChainService) {
 
   }
 
@@ -30,37 +26,51 @@ export class PageSendComponent implements OnInit {
     if(!this.userService.token){
       this.userService.getValideToken();
     }
-    this.tokens = (JSON.parse(sessionStorage.getItem("user")) as User).tokens.toString();
+    
+    this.userService.currentUser = JSON.parse(sessionStorage.getItem("user"));
+    if(!this.userService.currentUser){
+      this.router.navigate([""])
+      return;
+    }
 
-    // this.trxModel.address = "";
+    this.blockChainService.getMyTokenAndTransaction()
   }
 
   public send(form: NgForm) {
-    this.error = "";
-    this.errorInput = "";
-
-    let errorRequired: string = "Required";
-
-    if (this.trxModel.amount == null) {
-      this.error = errorRequired;
-      this.errorInput = "amount";
-
-    } else if (this.trxModel.amount <= 0) {
-      this.error = "Should be > 0";
-      this.errorInput = "amount";
-
-    } 
-    // else if (this.trxModel.address == "") {
-    //   this.error = errorRequired;
-    //   this.errorInput = "address";
-
-    // } 
-    else {
-      this.trxModel.date = new Date();
-      
-      // this.userService.send(JSON.parse(sessionStorage.getItem("user")), this.trxModel);
-
-      this.router.navigate(["history"]);
+    if(this.amount <= 0 || !this.amount || !this.accountId || this.accountId == this.userService.currentUser.accountId){
+      console.log("invalide input")
+      return;
     }
+    
+    if(this.amount > this.userService.currentUser.tokens){
+      console.log("not enough token")
+      return;
+    }
+    this.userService.checkAccountId(this.accountId)
+      .subscribe(async(exists) => {
+        if(exists){
+          let block: Block = {
+            data: {
+              amount: this.amount,
+              date: new Date(Date.now()),
+              receiver: this.accountId,
+              sender: this.userService.currentUser.accountId
+            },
+            hash: "",
+            index: 0,
+            previousHash: "",
+            signature: this.userService.currentUser.hash,
+            proofOfWork: ""
+          }
+          await this.blockChainService.calculateBlock(block);
+          console.log(block)
+        }else{
+          console.log("accounId invalide")
+        }
+      });
+  }
+
+  public goBack(){
+    this.router.navigate([""])
   }
 }

@@ -1,0 +1,17 @@
+#myForm{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.buttonPanel{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+button{
+    margin: auto;
+    width: max-content;
+}

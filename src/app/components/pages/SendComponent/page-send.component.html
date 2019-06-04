@@ -1,17 +1,23 @@
 <h2>{{ subTitle }}</h2>
 
 <div id="centeredBoxLayout">
-  <p id="centeredBoxHeader">{{ tokens }} tokens</p>
+  <p id="centeredBoxHeader">You currently have {{ userService.currentUser.tokens }} Tokens</p>
 
-  <form (ngSubmit)="send(form)" #form="ngForm">
+  <form id='myForm' (ngSubmit)="send(form)" #form="ngForm">
       <p>Amount</p>
-      <input type="number" name="amount" #trackAmount="ngModel" [(ngModel)]="trxModel.amount" required>
-      <app-label-input-error *ngIf="errorInput == 'amount'" text="{{ error }}"></app-label-input-error>
+      <input type="number" name="amount" [(ngModel)]="amount" required>
     
-      <p>Address</p>
-      <input type="text" name="address" #trackAddress="ngModel" [(ngModel)]="trxModel.address" required>
-      <app-label-input-error *ngIf="errorInput == 'address'" text="{{ error }}"></app-label-input-error>
+      <p>Receiver account ID</p>
+      <input type="text" name="address" [(ngModel)]="accountId" required>
     
-      <button class="actionButton" type="submit">Send</button>
+      <div class="buttonPanel">
+          <button mat-raised-button color="primary" class="actionButton" (click)="goBack();">
+            <mat-icon>home</mat-icon>
+          </button>
+          
+          <button mat-raised-button color="primary" class="actionButton" type="submit">
+              <mat-icon>send</mat-icon>
+            </button>
+      </div>
   </form>
 </div>

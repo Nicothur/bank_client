@@ -65,4 +65,15 @@ export class UserService {
       { headers: headers }
     );
   }
+
+  public checkAccountId(accountId: string): Observable<Boolean>{
+    let headers = {
+      Authorization: 'Bearer ' + this.token.token
+    };
+    return this.http.post<Boolean>(
+      'https://supbank-api.azurewebsites.net/User/Exist',
+      { AccountId: accountId },
+      { headers: headers }
+    );
+  }
 }
