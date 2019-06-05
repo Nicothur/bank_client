@@ -16,11 +16,8 @@ export class PageIndexComponent implements OnInit {
   public isConnected: boolean;
   public isTestingBlockChain: boolean;
 
-<<<<<<< Updated upstream
   public error: string;
 
-=======
->>>>>>> Stashed changes
   constructor(private router: Router, private blockChainService: BlockChainService, private userService: UserService) {}
 
   ngOnInit() {
