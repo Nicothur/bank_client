@@ -4,7 +4,16 @@
 }
 #centeredBoxLayout{
     display: "flex";
-    flex-direction: "column"
+    flex-direction: "column";
+
+    #errorMessage{
+        position: absolute;
+        background: indianred;
+        font-size: medium;
+        width: max-content;
+        height: max-content;
+        padding: 10px;
+    }
 }
 
 form{

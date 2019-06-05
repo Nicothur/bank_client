@@ -18,7 +18,7 @@ export class PageIndexComponent implements OnInit {
   public isConnected: boolean;
   public isTestingBlockChain: boolean;
 
-  
+  public error: string;
 
   constructor(private router: Router, private blockChainService: BlockChainService, private userService: UserService) {}
 
@@ -38,10 +38,14 @@ export class PageIndexComponent implements OnInit {
       this.blockChainService.getMyTokenAndTransaction()
 
       let peer = new SimplePeer ({
-        initiator: true
+        initiator: true,
+        tickle: false
       })
+
+      const self = this;
       
       peer.on('signal', function(data) {
+        console.log(self)
         const req = new XMLHttpRequest();
         req.open("POST","http://localhost:8080/join")
         let accountId = JSON.parse(sessionStorage.getItem("user")).accountId
@@ -98,7 +102,10 @@ export class PageIndexComponent implements OnInit {
       await this.blockChainService.mineABlock();
       console.log(this.blockChainService.blockChain)
     }else{
-      console.log("please enable mining on top left of screen")
+      this.error = "Please enable mining"
+      setTimeout(() => {
+        this.error = undefined
+      }, 4000)
     }
   }
 
@@ -108,7 +115,10 @@ export class PageIndexComponent implements OnInit {
       await this.blockChainService.getInterruptedNotBySameBlock();
       console.log(this.blockChainService.blockChain)
     }else{
-      console.log("please enable mining on top left of screen")
+      this.error = "Please enable mining"
+      setTimeout(() => {
+        this.error = undefined
+      }, 4000)
     }
   }
 
@@ -118,7 +128,10 @@ export class PageIndexComponent implements OnInit {
       await this.blockChainService.getInterruptedBySameBlock();
       console.log(this.blockChainService.blockChain)
     }else{
-      console.log("please enable mining on top left of screen")
+      this.error = "Please enable mining"
+      setTimeout(() => {
+        this.error = undefined
+      }, 4000)
     }
   }
 

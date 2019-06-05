@@ -13,7 +13,6 @@ export class PageConnectComponent implements OnInit{
   public subTitle: string = "Connection";
 
   public error: string;
-  public errorInput: string;
 
   public accountid: string;
   public password: string;
@@ -35,28 +34,29 @@ export class PageConnectComponent implements OnInit{
   }
 
   public connect(form: NgForm) {
-    this.error = "";
-    this.errorInput = "";
 
-    if (this.accountid == "") {
-      this.error = "Required";
-      this.errorInput = "username";
-
-    } else if (this.password == "") {
-      this.error = "Required";
-      this.errorInput = "password";
+    if (this.accountid == "" || this.accountid == undefined) {
+      this.error = "Username required";
+    } else if (this.password == "" || this.password == undefined) {
+      this.error = "Password required";
     } else {
       this.userService.login(this.accountid, this.password).subscribe((result: User)=> {
-        if(result == null){
-          this.error = "Unknown user";
-          this.errorInput = "username";
-        }
         sessionStorage.setItem("user", JSON.stringify(result));
         this.userService.currentUser = result
         this.userService.currentUser.tokens = 0
         // this.peerServices.connect(this.username, this.password)
         this.router.navigate([""]);
+      }, (err) => {
+        this.error = "Unknown user";
+        setTimeout(() => {
+          this.error = undefined
+        }, 4000)
       })
+    }
+    if(this.error){
+      setTimeout(() => {
+        this.error = undefined
+      }, 4000)
     }
   }
 

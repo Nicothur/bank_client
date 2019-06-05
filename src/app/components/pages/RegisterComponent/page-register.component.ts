@@ -17,6 +17,7 @@ export class PageRegisterComponent implements OnInit {
   public lastname: string;
   public email: string;
   public password: string;
+  public informationMessage: string;
 
   public currentUser: User;
 
@@ -34,12 +35,15 @@ export class PageRegisterComponent implements OnInit {
 
   public register(form: NgForm) {
     if (!this.firstname || !this.password || !this.email || !this.lastname) {
+      this.informationMessage = "Invalide inputs"
+      setTimeout(()=>{
+        this.informationMessage = undefined
+      }, 4000)
       return;
     }
     this.userService
       .create(this.firstname,this.lastname, this.email, this.password )
       .subscribe((user: User) => {
-        console.log(user);
         this.userService.currentUser = user;
         this.router.navigate(['connect']);
       });

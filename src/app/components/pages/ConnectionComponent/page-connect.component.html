@@ -1,6 +1,7 @@
 <h2>{{ subTitle }}</h2>
 
 <div id="centeredBoxLayout">
+  <mat-card *ngIf="error" id="errorMessage"> {{error}} </mat-card>
   <form (ngSubmit)="connect(form)" #form="ngForm">
       <p>Account ID</p>
       <input type="text" name="accountid" [(ngModel)]="accountid" required>

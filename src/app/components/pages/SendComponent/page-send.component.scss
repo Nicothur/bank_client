@@ -15,3 +15,12 @@ button{
     margin: auto;
     width: max-content;
 }
+
+#informationMessage{
+    position: absolute;
+    background: indianred;
+    font-size: medium;
+    width: max-content;
+    height: max-content;
+    padding: 10px;
+}

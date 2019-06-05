@@ -1,5 +1,11 @@
 var projectApp = angular.module('projectApp', ['ngRoute']);
 
+let variable1 = true
+
+projectApp.controller('MainCtrl', ['$scope', '$window', function($scope, $window) {
+    $scope.variable1 = $window.variable1;
+  }]);
+
 projectApp.config(function($routeProvider) {
     $routeProvider
         .when('/', {

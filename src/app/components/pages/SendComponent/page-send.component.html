@@ -1,6 +1,8 @@
 <h2>{{ subTitle }}</h2>
 
-<div id="centeredBoxLayout">
+<div id="centeredBoxLayout">  
+  <mat-card *ngIf="informationMessage" id="informationMessage"> {{informationMessage}} </mat-card>
+
   <p id="centeredBoxHeader">You currently have {{ userService.currentUser.tokens }} Tokens</p>
 
   <form id='myForm' (ngSubmit)="send(form)" #form="ngForm">

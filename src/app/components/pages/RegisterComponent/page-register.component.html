@@ -1,6 +1,7 @@
 <h2>{{ subTitle }}</h2>
 
 <div id="centeredBoxLayout">
+  <mat-card *ngIf="informationMessage" id="informationMessage"> {{informationMessage}} </mat-card>
   <form (ngSubmit)="register(form)" #form="ngForm">
       <p>Firstname</p>
       <input type="text" name="firstname" [(ngModel)]="firstname" required>

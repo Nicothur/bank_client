@@ -17,6 +17,7 @@ export class PageSendComponent implements OnInit {
 
   public accountId: string;
 
+  public informationMessage: string;
 
   constructor(private router: Router, public userService: UserService, private blockChainService: BlockChainService) {
 
@@ -38,12 +39,18 @@ export class PageSendComponent implements OnInit {
 
   public send(form: NgForm) {
     if(this.amount <= 0 || !this.amount || !this.accountId || this.accountId == this.userService.currentUser.accountId){
-      console.log("invalide input")
+      this.informationMessage = "Invalide inputs"
+      setTimeout(() => {
+        this.informationMessage = undefined
+      }, 4000)
       return;
     }
     
     if(this.amount > this.userService.currentUser.tokens){
-      console.log("not enough token")
+      this.informationMessage = "Not enough token"
+      setTimeout(() => {
+        this.informationMessage = undefined
+      }, 4000)
       return;
     }
     this.userService.checkAccountId(this.accountId)
@@ -65,7 +72,10 @@ export class PageSendComponent implements OnInit {
           await this.blockChainService.calculateBlock(block);
           console.log(block)
         }else{
-          console.log("accounId invalide")
+          this.informationMessage = "Invalide ID"
+          setTimeout(() => {
+            this.informationMessage = undefined
+          }, 4000)
         }
       });
   }

@@ -1,10 +1,11 @@
 
 <button mat-raised-button color="warn" *ngIf="isConnected" id="logoutButton" (click)="logout()">Logout</button>
-<mat-slide-toggle mat-raised-button color="accent" *ngIf="isConnected" id="mineToggle" [(ngModel)]="userService.isMining ">Mine Enabled</mat-slide-toggle>
+<mat-slide-toggle mat-raised-button color="accent" *ngIf="isConnected" id="mineToggle" [(ngModel)]="userService.isMining ">Mine {{ userService.isMining ? 'Enabled' : 'Disabled'}}</mat-slide-toggle>
 <h2>{{ subTitle }}</h2>
 
 <div id="centeredBoxLayout">
-
+    
+    <mat-card *ngIf="error" id="errorMessage"> {{error}} </mat-card>
     <div id="unconnectedLayout" *ngIf='!isConnected'>
         <button mat-raised-button color="primary"  class="navigationButton" (click)="navigate('connect')" color="primary">Connect</button>
         <p>OR</p>
