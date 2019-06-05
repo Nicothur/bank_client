@@ -12,6 +12,10 @@
 }
 
 #unconnectedLayout {
+    #navigationButton{
+        margin:auto;
+        width: max-content;
+    }
     p {
         margin: 15px 0px;
     }
@@ -34,6 +38,11 @@
             margin-bottom: 10px;
             button{
                 margin: 5px;
+            }
+        }
+        #panelTest{
+            button{
+                margin: 5px
             }
         }
     }

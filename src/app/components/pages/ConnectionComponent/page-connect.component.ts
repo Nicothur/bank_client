@@ -30,8 +30,8 @@ export class PageConnectComponent implements OnInit{
     sessionStorage.removeItem("user");
   }
 
-  public goToRegister(){
-    this.router.navigate(["register"])
+  public navigate(path){
+    this.router.navigate([path])
   }
 
   public connect(form: NgForm) {

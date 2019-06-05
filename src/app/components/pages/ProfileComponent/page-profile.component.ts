@@ -12,7 +12,9 @@ import { UserService } from 'src/app/Services/UserService';
 export class PageProfileComponent implements OnInit {
   public subTitle: string = "Profile";
 
-  constructor(private router: Router, private userService: UserService) {}
+  public isConnected: boolean;
+
+  constructor(private router: Router, public userService: UserService) {}
 
   ngOnInit() {
     if(!this.userService.token){
@@ -23,6 +25,7 @@ export class PageProfileComponent implements OnInit {
       this.router.navigate([""])
       return;
     }
+    this.isConnected = true
   }
 
   public goBack(){

@@ -18,7 +18,7 @@ export class PageSendComponent implements OnInit {
   public accountId: string;
 
 
-  constructor(private router: Router, private userService: UserService, private blockChainService: BlockChainService) {
+  constructor(private router: Router, public userService: UserService, private blockChainService: BlockChainService) {
 
   }
 

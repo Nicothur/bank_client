@@ -3,7 +3,6 @@ import { NgModule, Injectable } from '@angular/core';
 import { MatCardModule, MatDialogModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatTableModule, MatIconModule } from "@angular/material"
 import { Routes, RouterModule, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserSocket } from "./Models/Socket"
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -49,7 +48,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
   ],
   providers: [
-    UserSocket,
     BlockChainService,
     UserService,
     PeerService
