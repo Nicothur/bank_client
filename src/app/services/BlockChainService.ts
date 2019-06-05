@@ -43,7 +43,7 @@ export class BlockChainService {
 
   public async receivedBlock(block: Block){
     
-    if(isDevMode() ?  !await this.verifyBlock(block): !await this.verifyBlock(block)){
+    if(isDevMode() ?  !await this.verifyBlock(block): await this.verifyBlock(block)){
       this.blockChain[block.index] = block
       this.currentMinedBlock.proofOfWork = block.proofOfWork;
       if(this.currentMinedBlock == block){
