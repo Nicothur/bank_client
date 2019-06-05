@@ -12,4 +12,8 @@ export class AppComponent {
   constructor(private router: Router){
     
   }
+  
+  public navigate(path: string){
+    this.router.navigate([path])
+  }
 }

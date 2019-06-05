@@ -14,6 +14,18 @@ a {
     }
 }
 
+body {
+    overflow: hidden;
+}
+
+h2 {    
+    position: absolute;
+    font-family: auto;
+    top: 54px;
+    left: 28px;
+    background-color: white;
+}
+
 button {
     &:focus {
         outline: none;

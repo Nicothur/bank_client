@@ -2,8 +2,6 @@ import { Component, OnInit, isDevMode, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { BlockChainService } from 'src/app/Services/BlockChainService';
 import { UserService } from 'src/app/Services/UserService';
-import { of } from 'rxjs';
-import { HttpClient, HttpHandler } from '@angular/common/http';
 @Component({
   selector: 'app-page-index',
   templateUrl: './page-index.component.html',
@@ -18,8 +16,11 @@ export class PageIndexComponent implements OnInit {
   public isConnected: boolean;
   public isTestingBlockChain: boolean;
 
+<<<<<<< Updated upstream
   public error: string;
 
+=======
+>>>>>>> Stashed changes
   constructor(private router: Router, private blockChainService: BlockChainService, private userService: UserService) {}
 
   ngOnInit() {
