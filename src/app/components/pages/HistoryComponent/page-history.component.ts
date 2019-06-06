@@ -6,12 +6,6 @@ import { UserService } from 'src/app/Services/UserService';
 import { BlockChainService } from 'src/app/Services/BlockChainService';
 import { MatTableDataSource } from '@angular/material';
 
-export interface Received {
-  amount: number;
-  from: string;
-  date: string;
-}
-
 export interface transact {
   amount: number;
   id: string;
@@ -26,7 +20,7 @@ export interface transact {
 export class PageHistoryComponent implements OnInit {
   public subTitle: string = "History";
 
-  public isSendedTable: boolean= true;
+  public isSendedTable: boolean = true;
 
   public sended: transact[] = []; 
   public received: transact[] = [];
@@ -54,14 +48,14 @@ export class PageHistoryComponent implements OnInit {
       if(transaction.receiver == this.userService.currentUser.accountId){
         this.received.push({
           amount: transaction.amount,
-          date: transaction.date.toUTCString(),
+          date: typeof transaction.date == "string" ? new Date(transaction.date).toUTCString() : transaction.date.toUTCString(),
           id: transaction.sender,
         })
       }else{
         this.sended.push({
           amount: transaction.amount,
-          date: transaction.date.toUTCString(),
-          id: transaction.sender,
+          date: typeof transaction.date == "string" ? new Date(transaction.date).toUTCString() : transaction.date.toUTCString(),
+          id: transaction.receiver,
         })
       }
     });

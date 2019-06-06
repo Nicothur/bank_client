@@ -30,29 +30,29 @@ export class BlockChainService {
     throw 'Invalide Blockchain';
   }
 
-  public calculateBlock(block: Block){
+  public calculateBlock(block: Block) {
     let length = this.setAccordingToLastBlock();
-    block.proofOfWork = ""
+    block.proofOfWork = '';
     block.index = length;
     block.previousHash = this.blockChain[length - 1].hash;
     block.hash = shajs('sha256')
       .update(JSON.stringify(block))
       .digest('hex');
-    
   }
 
-  public async receivedBlock(block: Block){
-    
-    if(isDevMode() ?  !await this.verifyBlock(block): await this.verifyBlock(block)){
-      this.blockChain[block.index] = block
-      this.currentMinedBlock.proofOfWork = block.proofOfWork;
-      if(this.currentMinedBlock == block){
-        this.orderToStop = true 
-      }else{
-        this.orderToRehash = true
+  public async receivedBlock(block: Block) {
+    if (await this.verifyBlock(block) || !isDevMode()) {
+      this.blockChain[block.index] = block;
+      this.getMyTokenAndTransaction();
+      if(this.currentMinedBlock){
+        this.currentMinedBlock.proofOfWork = block.proofOfWork;
+        if (this.currentMinedBlock == block) {
+          this.orderToStop = true;
+        } else {
+          this.orderToRehash = true;
+        }
       }
     }
-    
   }
 
   public verifyBlock(block: Block) {
@@ -81,16 +81,16 @@ export class BlockChainService {
   }
 
   public findProofOfWork(block: Block) {
-    this.currentMinedBlock = block
+    this.currentMinedBlock = block;
     setTimeout(async () => {
       this.findedProofOfWork = await this.calculate(block);
-      if(this.orderToStop){
+      if (this.orderToStop) {
         this.orderToStop = false;
-        this.currentMinedBlock == null
-        return
-      }else if (this.orderToRehash){
-        block.proofOfWork = ""
-        this.calculateBlock(block)
+        this.currentMinedBlock == null;
+        return;
+      } else if (this.orderToRehash) {
+        block.proofOfWork = '';
+        this.calculateBlock(block);
         this.orderToRehash = false;
         this.findProofOfWork(block);
         return;
@@ -98,11 +98,13 @@ export class BlockChainService {
       if (!this.findedProofOfWork) {
         this.findProofOfWork(block);
       } else {
-        if(await this.verifyBlock(block)){
-          this.blockChain[block.index] = block
-          this.currentMinedBlock == null
-          console.log(this.blockChain)
-          this.getMyTokenAndTransaction()
+        if (await this.verifyBlock(block)) {
+          this.blockChain[block.index] = block;
+          this.getMyTokenAndTransaction();
+          this.currentMinedBlock == null;
+          if (block.signature != 'test') {
+            this.sendNewBlock(block);
+          }
           //TODO spread to others
         }
       }
@@ -114,9 +116,9 @@ export class BlockChainService {
     let block: Block = {
       index: 1,
       data: {
-        amount: 0,
+        amount: 2,
         date: new Date(Date.now()),
-        receiver: 'no one',
+        receiver: this.userService.currentUser.accountId,
         sender: 'no one'
       },
       signature: this.userService.currentUser.hash,
@@ -141,17 +143,89 @@ export class BlockChainService {
     return result;
   }
 
-  public getMyTokenAndTransaction(){
-    this.userService.currentUser.transactions = []
-    this.userService.currentUser.tokens = 0
-    for(let id in this.blockChain){
-      let transaction: Transaction = this.blockChain[id].data
-      if(transaction.receiver == this.userService.currentUser.hash){
-        this.userService.currentUser.transactions.push(transaction)
+  public getMyTokenAndTransaction() {
+    this.userService.currentUser.transactions = [];
+    this.userService.currentUser.tokens = 0;
+    for (let id in this.blockChain) {
+      let transaction: Transaction = this.blockChain[id].data;
+      if (transaction.receiver == this.userService.currentUser.accountId) {
+        this.userService.currentUser.transactions.push(transaction);
         this.userService.currentUser.tokens += transaction.amount;
-      }else if(transaction.sender == this.userService.currentUser.hash){
-        this.userService.currentUser.transactions.push(transaction)
+      } else if (transaction.sender == this.userService.currentUser.accountId) {
+        this.userService.currentUser.transactions.push(transaction);
         this.userService.currentUser.tokens -= transaction.amount;
+      }
+    }
+  }
+
+  public async sendNewBlock(block: Block) {
+    let data = JSON.stringify({
+      type: 'newBlock',
+      from: this.userService.currentUser.hash,
+      block: block
+    });
+    this.userService.peer.send(data);
+  }
+
+  public async askBlockChain() {
+    let data = JSON.stringify({
+      type: 'askBlockChain',
+      from: this.userService.currentUser.hash
+    });
+    this.userService.peer.send(data);
+  }
+
+  public async sendForMining(block: Block) {
+    let data = JSON.stringify({
+      type: 'mine',
+      from: this.userService.currentUser.hash,
+      block: block
+    });
+    this.userService.peer.send(data);
+  }
+
+  public async manageEnteringMessage(data) {
+    let body = JSON.parse(data);
+    if (body.from == this.userService.currentUser.hash) {
+      return;
+    }
+    switch (body.type) {
+      case 'askBlockChain':
+        this.userService.peer.send(
+          JSON.stringify({
+            type: 'sendBlockChain',
+            from: this.userService.currentUser.hash,
+            data: this.blockChain
+          })
+        );
+        break;
+      case 'sendBlockChain':
+        this.receiveNewBlockChain(body.data);
+        break;
+      case 'mine':
+        if(this.userService.isMining){
+          this.findProofOfWork(body.block);
+        }
+        break;
+      case 'newBlock':
+        this.receivedBlock(body.block);
+        break;
+    }
+  }
+
+  public async receiveNewBlockChain(blockChain: Object) {
+    let lengthNewBlockChain = 0;
+    let lengthMyBlockChain = 0;
+    for (let element in blockChain) {
+      lengthNewBlockChain++;
+    }
+    for (let element in this.blockChain) {
+      lengthMyBlockChain++;
+    }
+    if (lengthNewBlockChain > lengthMyBlockChain) {
+      this.blockChain = blockChain;
+      if (this.currentMinedBlock != null) {
+        this.orderToRehash = true;
       }
     }
   }
@@ -162,45 +236,46 @@ export class BlockChainService {
 
   public mineABlock() {
     setTimeout(() => {
-      console.log("Starting to mine")
+      console.log('Starting to mine');
       this.fakeBlock = {
         data: {
           amount: 2,
           date: new Date(Date.now()),
           receiver: this.userService.currentUser.hash,
-          sender: 'lepape'
+          sender: '246175000400'
         },
-        signature: this.userService.currentUser.hash,
+        signature: 'test',
         index: 0,
         previousHash: '',
         proofOfWork: '',
         hash: ''
       };
-  
+
       try {
-        this.calculateBlock(this.fakeBlock)
+        this.calculateBlock(this.fakeBlock);
         this.findProofOfWork(this.fakeBlock);
       } catch (err) {
         console.log(err);
       }
-    }, 2000)
+    }, 2000);
   }
-  public getInterruptedBySameBlock(){
+
+  public getInterruptedBySameBlock() {
     setTimeout(async () => {
-      console.log("pushing a block")
-      await this.receivedBlock(this.currentMinedBlock)
-    }, 3000)
+      console.log('pushing a block');
+      await this.receivedBlock(this.currentMinedBlock);
+    }, 3000);
   }
-  
-  public getInterruptedNotBySameBlock(){
+
+  public getInterruptedNotBySameBlock() {
     setTimeout(async () => {
-      console.log("pushing a block")
+      console.log('pushing a block');
       let tempBlock = {
         data: {
           amount: 1,
           date: this.currentMinedBlock.data.date,
           receiver: this.userService.currentUser.hash,
-          sender: 'lepape'
+          sender: '246175000400'
         },
         signature: this.userService.currentUser.hash,
         index: this.currentMinedBlock.index,
@@ -208,7 +283,7 @@ export class BlockChainService {
         proofOfWork: this.currentMinedBlock.proofOfWork,
         hash: this.currentMinedBlock.hash
       };
-      await this.receivedBlock(tempBlock)
-    }, 3000)
+      await this.receivedBlock(tempBlock);
+    }, 3000);
   }
 }

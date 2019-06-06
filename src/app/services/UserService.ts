@@ -11,9 +11,19 @@ import { Transaction } from '../Models/Transaction';
 export class UserService {
   public token: Token;
   public currentUser: User;
-  public isMining: boolean;
+  public isMining: boolean = true;
+  public myPeers = [];
+  public peerAlreadyConnected = [];
+  public peer: any;
+  public connectionEstablished: boolean = false;
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) {
+    if(location.hash == "#init"){
+      localStorage.removeItem("offer")
+      localStorage.removeItem("answer")
+    }
+  }
 
   public login(id, password): Observable<any> {
     let body = {

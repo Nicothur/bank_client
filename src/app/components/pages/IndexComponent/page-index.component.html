@@ -1,32 +1,50 @@
 
 <button mat-raised-button color="warn" *ngIf="isConnected" id="logoutButton" (click)="logout()">Logout</button>
+
 <mat-slide-toggle mat-raised-button color="accent" *ngIf="isConnected" id="mineToggle" [(ngModel)]="userService.isMining ">Mine {{ userService.isMining ? 'Enabled' : 'Disabled'}}</mat-slide-toggle>
+
 <h2>{{ subTitle }}</h2>
 
-<div id="centeredBoxLayout">
+<div id="container">
     
-    <mat-card *ngIf="error" id="errorMessage"> {{error}} </mat-card>
-    <div id="unconnectedLayout" *ngIf='!isConnected'>
-        <button mat-raised-button color="primary"  class="navigationButton" (click)="navigate('connect')" color="primary">Connect</button>
-        <p>OR</p>
-        <button mat-raised-button color="primary"  class="navigationButton" (click)="navigate('register')" color="primary">Create an account</button>
-    </div>
+    <mat-card *ngIf="isConnected" id="PeerToPeerPanel">
+        <mat-label>Please copy your connection string and paste it to the other client</mat-label>
+        <mat-form-field>
+            <textarea id="myData" [(ngModel)]="myData" matInput placeholder="Input">{{myData}}</textarea>
+        </mat-form-field>
+        <div id="buttons">
+            <input type="text" id="inputBox" [(ngModel)]="inputData">   
+            <button mat-raised-button color="primary" (click)="connect()">Connect To Peer</button>
+        </div>    
     
-    <div id="connectedLayout" *ngIf='isConnected'>
-        <p>You have {{ userService.currentUser.tokens }} tokens</p>
-        <div id="buttonPanel">
-            <div id="panel1">
-                <button mat-raised-button color="primary" (click)="navigate('send')">Send</button>
-                <button mat-raised-button color="primary" (click)="navigate('history')">History</button>
-            </div>
-            <div id="panel2">
-                <button mat-raised-button color="primary" (click)="navigate('profile')">Profile</button>
-            </div>
-            <div id="panelTest" *ngIf="isTestingBlockChain">
-                <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlock()">Mine</button>
-                <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlockAnReceiveNotTheSameBlock()">mineBlockAnReceiveNotTheSameBlock</button>
-                <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlockAnReceiveTheSameBlock()">mineBlockAnReceiveTheSameBlock</button>
+    </mat-card>
+
+    <div id="centeredBoxLayout">
+        <mat-card *ngIf="error" id="errorMessage"> {{error}} </mat-card>
+        <div id="unconnectedLayout" *ngIf='!isConnected'>
+            <button mat-raised-button color="primary"  class="navigationButton" (click)="navigate('connect')" color="primary">Connect</button>
+            <p>OR</p>
+            <button mat-raised-button color="primary"  class="navigationButton" (click)="navigate('register')" color="primary">Create an account</button>
+        </div>
+            
+        <div id="connectedLayout" *ngIf='isConnected'>
+            <p>You have {{ userService.currentUser.tokens }} tokens</p>
+            <div id="buttonPanel">
+                <div id="panel1">
+                    <button mat-raised-button color="primary" (click)="navigate('send')">Send</button>
+                    <button mat-raised-button color="primary" (click)="navigate('history')">History</button>
+                </div>
+                <div id="panel2">
+                    <button mat-raised-button color="primary" (click)="navigate('profile')">Profile</button>
+                </div>
+                <div id="panelTest" *ngIf="isTestingBlockChain">
+                    <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlock()">Mine</button>
+                    <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlockAnReceiveNotTheSameBlock()">mineBlockAnReceiveNotTheSameBlock</button>
+                    <button mat-raised-button color="accent"  class="actionButton" (click)="mineBlockAnReceiveTheSameBlock()">mineBlockAnReceiveTheSameBlock</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+

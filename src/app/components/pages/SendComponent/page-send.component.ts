@@ -70,7 +70,8 @@ export class PageSendComponent implements OnInit {
             proofOfWork: ""
           }
           await this.blockChainService.calculateBlock(block);
-          console.log(block)
+          this.blockChainService.sendForMining(block)
+          this.router.navigate([""])
         }else{
           this.informationMessage = "Invalide ID"
           setTimeout(() => {

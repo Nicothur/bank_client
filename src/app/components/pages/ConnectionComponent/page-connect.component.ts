@@ -36,7 +36,7 @@ export class PageConnectComponent implements OnInit{
   public connect(form: NgForm) {
 
     if (this.accountid == "" || this.accountid == undefined) {
-      this.error = "Username required";
+      this.error = "Account required";
     } else if (this.password == "" || this.password == undefined) {
       this.error = "Password required";
     } else {
@@ -44,7 +44,6 @@ export class PageConnectComponent implements OnInit{
         sessionStorage.setItem("user", JSON.stringify(result));
         this.userService.currentUser = result
         this.userService.currentUser.tokens = 0
-        // this.peerServices.connect(this.username, this.password)
         this.router.navigate([""]);
       }, (err) => {
         this.error = "Unknown user";

@@ -44,8 +44,18 @@ export class PageRegisterComponent implements OnInit {
     this.userService
       .create(this.firstname,this.lastname, this.email, this.password )
       .subscribe((user: User) => {
-        this.userService.currentUser = user;
-        this.router.navigate(['connect']);
+        this.userService.login(user.accountId, this.password).subscribe((result: User)=> {
+          sessionStorage.setItem("user", JSON.stringify(result));
+          this.userService.currentUser = result
+          this.userService.currentUser.tokens = 0
+          this.router.navigate([""]);
+        })
+      }, (data) => {
+        console.log(data)
+        this.informationMessage = data.error.reason
+        setTimeout(()=>{
+          this.informationMessage = undefined
+        }, 4000)
       });
   }
 

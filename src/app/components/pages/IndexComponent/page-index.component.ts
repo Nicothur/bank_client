@@ -1,7 +1,9 @@
-import { Component, OnInit, isDevMode, EventEmitter } from '@angular/core';
+import { Component, OnInit, isDevMode, EventEmitter, Self, AfterViewInit, ChangeDetectorRef, ApplicationRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BlockChainService } from 'src/app/Services/BlockChainService';
 import { UserService } from 'src/app/Services/UserService';
+import { of, TimeInterval } from 'rxjs';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 @Component({
   selector: 'app-page-index',
   templateUrl: './page-index.component.html',
@@ -10,18 +12,23 @@ import { UserService } from 'src/app/Services/UserService';
 export class PageIndexComponent implements OnInit {
   public subTitle: string = "Index";
   
-  public peer: any;
   public childEvent = new EventEmitter();
 
   public isConnected: boolean;
   public isTestingBlockChain: boolean;
-
+  public myData: string;
   public error: string;
+  public inputData: string;
+  public connectionEstablished: boolean = false;
 
-  constructor(private router: Router, private blockChainService: BlockChainService, private userService: UserService) {}
+  constructor(private router: Router, private blockChainService: BlockChainService, private userService: UserService) {
+    if(sessionStorage.getItem("connected")){
+      this.connectionEstablished = true
+    }
+  }
 
   ngOnInit() {
-    this.isTestingBlockChain = isDevMode();
+    this.isTestingBlockChain = !isDevMode();
   
     if(!this.userService.token){
       this.userService.getValideToken();
@@ -32,29 +39,38 @@ export class PageIndexComponent implements OnInit {
     this.isConnected = this.userService.currentUser != null;
 
     if (this.isConnected) {
+
       this.blockChainService.initFirstBlock();
       this.blockChainService.getMyTokenAndTransaction()
-
-      let peer = new SimplePeer ({
-        initiator: true,
-        tickle: false
-      })
-
-      const self = this;
-      
-      peer.on('signal', function(data) {
-        console.log(self)
-        const req = new XMLHttpRequest();
-        req.open("POST","http://localhost:8080/join")
-        let accountId = JSON.parse(sessionStorage.getItem("user")).accountId
-        req.send(JSON.stringify({accountId: accountId, connectionString: data}))
-      })
-      
-      peer.on('data', function(data) {
-        console.log('Recieved message:' + data);
-      })
+      if(!this.userService.peer){
+        this.userService.peer = new SimplePeer({ 
+          initiator: location.hash === "#init",
+          trickle: false
+        })
+  
+        this.userService.peer.on('signal', data => {
+          if(data.type){
+            this.myData = JSON.stringify(data)
+          }
+        })
+  
+        this.userService.peer.on("connect", async(data) => {
+          console.log("connected")
+          this.blockChainService.askBlockChain()
+        })
+  
+        this.userService.peer.on('data', (data) => {
+          this.blockChainService.manageEnteringMessage(""+data)
+        })
+      }
     }
   }
+
+
+  public connect(){
+    this.userService.peer.signal(JSON.parse(this.inputData))
+  }
+
 
   public logout() {
     sessionStorage.removeItem("user");
@@ -62,30 +78,7 @@ export class PageIndexComponent implements OnInit {
     document.location.reload();
   }
 
-  connect() {
-    // this.peer.signal(JSON.parse(this.targetpeer));
-  }
-  
-  message() {
-    this.peer.send('Hello world');
-  }
 
-  public async receiveNewBlockChain(blockChain: Object){
-    let lengthNewBlockChain = 0;
-    let lengthMyBlockChain = 0;
-    for(let element in blockChain){
-      lengthNewBlockChain++;
-    }
-    for(let element in this.blockChainService.blockChain){
-      lengthMyBlockChain++;
-    }
-    if(lengthNewBlockChain > lengthMyBlockChain){
-      this.blockChainService.blockChain = blockChain
-      if(this.blockChainService.currentMinedBlock != null){
-        this.blockChainService.orderToRehash = true;
-      }
-    }
-  }
   public navigate(path: string){
     this.router.navigate([path])
   }
